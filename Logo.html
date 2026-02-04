@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo - 下载PNG</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            gap: 30px;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 16px;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            padding: 12px 16px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .control-group label {
+            font-weight: 600;
+        }
+
+        .control-group select,
+        .control-group input[type="range"] {
+            padding: 6px 8px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        .size-value {
+            min-width: 36px;
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo-text {
+            color: white;
+            font-size: 48px;
+            font-weight: bold;
+            font-style: normal;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+            transition: all 0.3s ease;
+            line-height: 1;
+            margin: 0;
+            padding: 0;
+        }
+
+        .download-btn {
+            padding: 12px 24px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: background-color 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background-color: #1976D2;
+        }
+
+        canvas {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls" aria-label="文字样式设置">
+        <div class="control-group">
+            <label for="textContent">文字</label>
+            <input id="textContent" type="text" value="ZH" maxlength="10" style="width: 80px; padding: 6px 8px; border-radius: 6px; border: 1px solid #ddd; font-size: 14px;" />
+        </div>
+        <div class="control-group">
+            <label for="slant">倾斜</label>
+            <select id="slant">
+                <option value="normal">正体</option>
+                <option value="italic">斜体</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label for="weight">加粗</label>
+            <select id="weight">
+                <option value="bold" selected>加粗</option>
+                <option value="normal">不加粗</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label for="size">字体</label>
+            <input id="size" type="range" min="28" max="100" step="1" value="48" />
+            <span class="size-value" id="sizeValue">48</span>
+        </div>
+        <div class="control-group">
+            <label for="logoSize">Logo</label>
+            <input id="logoSize" type="range" min="80" max="240" step="10" value="120" />
+            <span class="size-value" id="logoSizeValue">120</span>
+        </div>
+        <div class="control-group">
+            <label for="offsetX">左右</label>
+            <input id="offsetX" type="range" min="-30" max="30" step="1" value="0" />
+            <span class="size-value" id="offsetXValue">0</span>
+        </div>
+        <div class="control-group">
+            <label for="offsetY">上下</label>
+            <input id="offsetY" type="range" min="-30" max="30" step="1" value="0" />
+            <span class="size-value" id="offsetYValue">0</span>
+        </div>
+        <div class="control-group">
+            <label for="shadowBlur">阴影</label>
+            <input id="shadowBlur" type="range" min="0" max="20" step="1" value="4" />
+            <span class="size-value" id="shadowBlurValue">4</span>
+        </div>
+        <div class="control-group">
+            <label for="textColor">文字色</label>
+            <input id="textColor" type="color" value="#ffffff" style="width: 50px; height: 32px; border: 1px solid #ddd; border-radius: 6px; cursor: pointer;" />
+        </div>
+        <div class="control-group">
+            <label for="bgColor1">背景色1</label>
+            <input id="bgColor1" type="color" value="#d32f2f" style="width: 50px; height: 32px; border: 1px solid #ddd; border-radius: 6px; cursor: pointer;" />
+        </div>
+        <div class="control-group">
+            <label for="bgColor2">背景色2</label>
+            <input id="bgColor2" type="color" value="#c62828" style="width: 50px; height: 32px; border: 1px solid #ddd; border-radius: 6px; cursor: pointer;" />
+        </div>
+        <div class="control-group">
+            <label for="bgShadow">背景阴影</label>
+            <input id="bgShadow" type="range" min="0" max="30" step="2" value="12" />
+            <span class="size-value" id="bgShadowValue">12</span>
+        </div>
+    </div>
+
+    <div class="logo" id="logo">
+        <span class="logo-text" id="logoText">ZH</span>
+    </div>
+    
+    <button class="download-btn" onclick="downloadLogo()">📥 下载PNG图片</button>
+    
+    <canvas id="canvas"></canvas>
+
+    <script>
+        const textContentEl = document.getElementById('textContent');
+        const slantEl = document.getElementById('slant');
+        const weightEl = document.getElementById('weight');
+        const sizeEl = document.getElementById('size');
+        const sizeValueEl = document.getElementById('sizeValue');
+        const logoTextEl = document.getElementById('logoText');
+        const logoSizeEl = document.getElementById('logoSize');
+        const logoSizeValueEl = document.getElementById('logoSizeValue');
+        const logoEl = document.getElementById('logo');
+        const offsetXEl = document.getElementById('offsetX');
+        const offsetXValueEl = document.getElementById('offsetXValue');
+        const offsetYEl = document.getElementById('offsetY');
+        const offsetYValueEl = document.getElementById('offsetYValue');
+        const shadowBlurEl = document.getElementById('shadowBlur');
+        const shadowBlurValueEl = document.getElementById('shadowBlurValue');
+        const textColorEl = document.getElementById('textColor');
+        const bgColor1El = document.getElementById('bgColor1');
+        const bgColor2El = document.getElementById('bgColor2');
+        const bgShadowEl = document.getElementById('bgShadow');
+        const bgShadowValueEl = document.getElementById('bgShadowValue');
+
+        function applyTextStyle() {
+            const text = textContentEl.value.trim() || 'ZH';
+            const slant = slantEl.value;
+            const weight = weightEl.value;
+            const fontSize = Number(sizeEl.value);
+            const offsetX = Number(offsetXEl.value);
+            const offsetY = Number(offsetYEl.value);
+            const shadowBlur = Number(shadowBlurEl.value);
+            const textColor = textColorEl.value;
+
+            logoTextEl.textContent = text;
+            logoTextEl.style.fontStyle = slant;
+            logoTextEl.style.fontWeight = weight;
+            logoTextEl.style.fontSize = `${fontSize}px`;
+            logoTextEl.style.color = textColor;
+            logoTextEl.style.textShadow = `0 2px ${shadowBlur}px rgba(0, 0, 0, 0.3)`;
+            
+            const skew = slant === 'italic' ? 'skewX(-12deg)' : '';
+            const translate = `translate(${offsetX}px, ${offsetY}px)`;
+            logoTextEl.style.transform = skew ? `${translate} ${skew}` : translate;
+            
+            sizeValueEl.textContent = String(fontSize);
+            offsetXValueEl.textContent = String(offsetX);
+            offsetYValueEl.textContent = String(offsetY);
+            shadowBlurValueEl.textContent = String(shadowBlur);
+        }
+
+        function applyBackgroundColor() {
+            const bgColor1 = bgColor1El.value;
+            const bgColor2 = bgColor2El.value;
+            const bgShadow = Number(bgShadowEl.value);
+            logoEl.style.background = `linear-gradient(135deg, ${bgColor1} 0%, ${bgColor2} 100%)`;
+            logoEl.style.boxShadow = `0 4px ${bgShadow}px rgba(0, 0, 0, 0.15)`;
+            bgShadowValueEl.textContent = String(bgShadow);
+        }
+
+        function applyLogoSize() {
+            const logoSize = Number(logoSizeEl.value);
+            logoEl.style.width = `${logoSize}px`;
+            logoEl.style.height = `${logoSize}px`;
+            logoSizeValueEl.textContent = String(logoSize);
+        }
+
+        textContentEl.addEventListener('input', applyTextStyle);
+        slantEl.addEventListener('change', applyTextStyle);
+        weightEl.addEventListener('change', applyTextStyle);
+        sizeEl.addEventListener('input', applyTextStyle);
+        logoSizeEl.addEventListener('input', applyLogoSize);
+        offsetXEl.addEventListener('input', applyTextStyle);
+        offsetYEl.addEventListener('input', applyTextStyle);
+        shadowBlurEl.addEventListener('input', applyTextStyle);
+        textColorEl.addEventListener('input', applyTextStyle);
+        bgColor1El.addEventListener('input', applyBackgroundColor);
+        bgColor2El.addEventListener('input', applyBackgroundColor);
+        bgShadowEl.addEventListener('input', applyBackgroundColor);
+
+        // 初始化样式
+        applyTextStyle();
+        applyLogoSize();
+        applyBackgroundColor();
+
+        // 绘制圆角矩形的辅助函数（兼容性更好）
+        function drawRoundedRect(ctx, x, y, width, height, radius) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+        }
+
+        function downloadLogo() {
+            try {
+                const canvas = document.getElementById('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // 设置canvas尺寸 (使用更高分辨率以获得更清晰的图片)
+                const scale = 4;
+                const logoSize = Number(logoSizeEl.value);
+                const canvasSize = logoSize * scale;
+                const bgShadow = Number(bgShadowEl.value);
+                
+                // 留出阴影空间
+                const shadowSpace = bgShadow * scale * 2;
+                canvas.width = canvasSize + shadowSpace;
+                canvas.height = canvasSize + shadowSpace;
+                
+                // 创建渐变背景
+                const bgColor1 = bgColor1El.value;
+                const bgColor2 = bgColor2El.value;
+                const gradient = ctx.createLinearGradient(shadowSpace/2, shadowSpace/2, canvasSize + shadowSpace/2, canvasSize + shadowSpace/2);
+                gradient.addColorStop(0, bgColor1);
+                gradient.addColorStop(1, bgColor2);
+                
+                // 绘制阴影
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.15)';
+                ctx.shadowBlur = bgShadow * scale;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 4 * scale;
+                
+                // 绘制圆角矩形背景
+                const radius = 20 * scale;
+                ctx.fillStyle = gradient;
+                drawRoundedRect(ctx, shadowSpace/2, shadowSpace/2, canvasSize, canvasSize, radius);
+                ctx.fill();
+                
+                // 清除阴影设置，以免影响文字
+                
+                // 获取当前文字样式
+                const text = textContentEl.value.trim() || 'ZH';
+                const slant = slantEl.value;
+                const weight = weightEl.value;
+                const fontSize = Number(sizeEl.value);
+                const offsetX = Number(offsetXEl.value);
+                const offsetY = Number(offsetYEl.value);
+                const shadowBlur = Number(shadowBlurEl.value);
+                const textColor = textColorEl.value;
+                
+                // 添加阴影效果到文字
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+                ctx.shadowBlur = shadowBlur * scale;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 2 * scale;
+                
+                // 绘制文字
+                ctx.fillStyle = textColor;
+                ctx.font = `${slant} ${weight} ${fontSize * scale}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                ctx.save();
+                ctx.translate(canvasSize / 2 + offsetX * scale + shadowSpace/2, canvasSize / 2 + offsetY * scale + shadowSpace/2);
+                if (slant === 'italic') {
+                    const angle = -12 * Math.PI / 180;
+                    ctx.transform(1, 0, Math.tan(angle), 1, 0, 0);
+                }
+                ctx.fillText(text, 0, 0);
+                ctx.restore();
+                
+                // 下载图片
+                canvas.toBlob(function(blob) {
+                    if (blob) {
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.download = 'logo.png';
+                        link.href = url;
+                        link.click();
+                        URL.revokeObjectURL(url);
+                        //alert('✅ 图片已下载！');
+                    } else {
+                        alert('❌ 生成图片失败，请重试。');
+                    }
+                }, 'image/png');
+            } catch (error) {
+                console.error('下载失败：', error);
+                alert('❌ 下载失败：' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
