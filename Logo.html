@@ -123,7 +123,7 @@
         </div>
         <div class="control-group">
             <label for="size">字体</label>
-            <input id="size" type="range" min="28" max="100" step="1" value="48" />
+            <input id="size" type="range" min="28" max="120" step="1" value="48" />
             <span class="size-value" id="sizeValue">48</span>
         </div>
         <div class="control-group">
@@ -163,6 +163,11 @@
             <input id="bgShadow" type="range" min="0" max="30" step="2" value="12" />
             <span class="size-value" id="bgShadowValue">12</span>
         </div>
+        <div class="control-group">
+            <label for="borderRadius">圆角</label>
+            <input id="borderRadius" type="range" min="0" max="60" step="2" value="20" />
+            <span class="size-value" id="borderRadiusValue">20</span>
+        </div>
     </div>
 
     <div class="logo" id="logo">
@@ -194,6 +199,8 @@
         const bgColor2El = document.getElementById('bgColor2');
         const bgShadowEl = document.getElementById('bgShadow');
         const bgShadowValueEl = document.getElementById('bgShadowValue');
+        const borderRadiusEl = document.getElementById('borderRadius');
+        const borderRadiusValueEl = document.getElementById('borderRadiusValue');
 
         function applyTextStyle() {
             const text = textContentEl.value.trim() || 'ZH';
@@ -231,6 +238,12 @@
             bgShadowValueEl.textContent = String(bgShadow);
         }
 
+        function applyBorderRadius() {
+            const borderRadius = Number(borderRadiusEl.value);
+            logoEl.style.borderRadius = `${borderRadius}px`;
+            borderRadiusValueEl.textContent = String(borderRadius);
+        }
+
         function applyLogoSize() {
             const logoSize = Number(logoSizeEl.value);
             logoEl.style.width = `${logoSize}px`;
@@ -250,11 +263,13 @@
         bgColor1El.addEventListener('input', applyBackgroundColor);
         bgColor2El.addEventListener('input', applyBackgroundColor);
         bgShadowEl.addEventListener('input', applyBackgroundColor);
+        borderRadiusEl.addEventListener('input', applyBorderRadius);
 
         // 初始化样式
         applyTextStyle();
         applyLogoSize();
         applyBackgroundColor();
+        applyBorderRadius();
 
         // 绘制圆角矩形的辅助函数（兼容性更好）
         function drawRoundedRect(ctx, x, y, width, height, radius) {
@@ -301,7 +316,8 @@
                 ctx.shadowOffsetY = 4 * scale;
                 
                 // 绘制圆角矩形背景
-                const radius = 20 * scale;
+                const borderRadius = Number(borderRadiusEl.value);
+                const radius = borderRadius * scale;
                 ctx.fillStyle = gradient;
                 drawRoundedRect(ctx, shadowSpace/2, shadowSpace/2, canvasSize, canvasSize, radius);
                 ctx.fill();
