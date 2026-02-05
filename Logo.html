@@ -15,6 +15,7 @@
             margin: 0;
             font-family: Arial, sans-serif;
             gap: 30px;
+            padding: 20px 0;
         }
 
         .controls {
@@ -27,6 +28,7 @@
             padding: 12px 16px;
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            max-width: 1200px;
         }
 
         .control-group {
@@ -49,6 +51,10 @@
             font-size: 14px;
         }
 
+        .control-group select {
+            min-width: 100px;
+        }
+
         .size-value {
             min-width: 36px;
             text-align: right;
@@ -64,6 +70,26 @@
             justify-content: center;
             align-items: center;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 40%;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: inherit;
+        }
+
+        .logo.with-highlight::before {
+            opacity: 1;
         }
 
         .logo-text {
@@ -71,6 +97,7 @@
             font-size: 48px;
             font-weight: bold;
             font-style: normal;
+            font-family: Arial, sans-serif;
             letter-spacing: 2px;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             display: inline-block;
@@ -78,6 +105,8 @@
             line-height: 1;
             margin: 0;
             padding: 0;
+            position: relative;
+            z-index: 1;
         }
 
         .download-btn {
@@ -99,13 +128,107 @@
         canvas {
             display: none;
         }
+
+        .control-group.disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .section-title {
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+            color: #666;
+            font-size: 13px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 4px;
+            margin-top: 4px;
+        }
     </style>
 </head>
 <body>
     <div class="controls" aria-label="文字样式设置">
+        <div class="section-title">🎨 基础设置</div>
+        
         <div class="control-group">
             <label for="textContent">文字</label>
             <input id="textContent" type="text" value="ZH" maxlength="10" style="width: 80px; padding: 6px 8px; border-radius: 6px; border: 1px solid #ddd; font-size: 14px;" />
+        </div>
+        <div class="control-group">
+            <label for="shape">形状</label>
+            <select id="shape">
+                <option value="rounded">圆角矩形</option>
+                <option value="circle">圆形</option>
+            </select>
+        </div>
+        <div class="control-group" id="borderRadiusGroup">
+            <label for="borderRadius">圆角</label>
+            <input id="borderRadius" type="range" min="0" max="60" step="2" value="20" />
+            <span class="size-value" id="borderRadiusValue">20</span>
+        </div>
+        <div class="control-group">
+            <label for="logoSize">Logo</label>
+            <input id="logoSize" type="range" min="80" max="240" step="10" value="120" />
+            <span class="size-value" id="logoSizeValue">120</span>
+        </div>
+
+        <div class="section-title">✨ 立体效果</div>
+        
+        <div class="control-group">
+            <label for="innerShadow">内阴影</label>
+            <input id="innerShadow" type="range" min="0" max="20" step="1" value="0" />
+            <span class="size-value" id="innerShadowValue">0</span>
+        </div>
+        <div class="control-group">
+            <label for="highlight">高光</label>
+            <select id="highlight">
+                <option value="none">无</option>
+                <option value="subtle">微弱</option>
+                <option value="medium">中等</option>
+                <option value="strong">强烈</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label for="emboss">浮雕</label>
+            <input id="emboss" type="range" min="0" max="10" step="1" value="0" />
+            <span class="size-value" id="embossValue">0</span>
+        </div>
+
+        <div class="section-title">📝 文字样式</div>
+        
+        <div class="control-group">
+            <label for="fontFamily">字体</label>
+            <select id="fontFamily">
+                <optgroup label="英文字体">
+                    <option value="Arial, sans-serif" selected>Arial</option>
+                    <option value="'Times New Roman', serif">Times New Roman</option>
+                    <option value="Georgia, serif">Georgia</option>
+                    <option value="'Courier New', monospace">Courier New</option>
+                    <option value="Verdana, sans-serif">Verdana</option>
+                    <option value="Impact, sans-serif">Impact</option>
+                    <option value="'Comic Sans MS', cursive">Comic Sans MS</option>
+                    <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+                    <option value="'Lucida Console', monospace">Lucida Console</option>
+                    <option value="'Palatino Linotype', serif">Palatino</option>
+                </optgroup>
+                <optgroup label="中文字体">
+                    <option value="'Microsoft YaHei', 微软雅黑, sans-serif">微软雅黑</option>
+                    <option value="SimSun, 宋体, serif">宋体</option>
+                    <option value="SimHei, 黑体, sans-serif">黑体</option>
+                    <option value="KaiTi, 楷体, serif">楷体</option>
+                    <option value="'Microsoft JhengHei', 微软正黑体, sans-serif">微软正黑体</option>
+                    <option value="FangSong, 仿宋, serif">仿宋</option>
+                    <option value="STHeiti, 华文黑体, sans-serif">华文黑体</option>
+                    <option value="STKaiti, 华文楷体, serif">华文楷体</option>
+                    <option value="STSong, 华文宋体, serif">华文宋体</option>
+                </optgroup>
+                <optgroup label="创意字体">
+                    <option value="'Arial Black', sans-serif">Arial Black</option>
+                    <option value="'Brush Script MT', cursive">Brush Script</option>
+                    <option value="'Copperplate', fantasy">Copperplate</option>
+                    <option value="'Papyrus', fantasy">Papyrus</option>
+                </optgroup>
+            </select>
         </div>
         <div class="control-group">
             <label for="slant">倾斜</label>
@@ -122,14 +245,19 @@
             </select>
         </div>
         <div class="control-group">
-            <label for="size">字体</label>
+            <label for="size">字号</label>
             <input id="size" type="range" min="28" max="120" step="1" value="48" />
             <span class="size-value" id="sizeValue">48</span>
         </div>
         <div class="control-group">
-            <label for="logoSize">Logo</label>
-            <input id="logoSize" type="range" min="80" max="240" step="10" value="120" />
-            <span class="size-value" id="logoSizeValue">120</span>
+            <label for="letterSpacing">字距</label>
+            <input id="letterSpacing" type="range" min="-5" max="20" step="0.5" value="2" />
+            <span class="size-value" id="letterSpacingValue">2</span>
+        </div>
+        <div class="control-group">
+            <label for="textStroke">描边</label>
+            <input id="textStroke" type="range" min="0" max="8" step="0.5" value="0" />
+            <span class="size-value" id="textStrokeValue">0</span>
         </div>
         <div class="control-group">
             <label for="offsetX">左右</label>
@@ -146,9 +274,16 @@
             <input id="shadowBlur" type="range" min="0" max="20" step="1" value="4" />
             <span class="size-value" id="shadowBlurValue">4</span>
         </div>
+
+        <div class="section-title">🎨 颜色设置</div>
+        
         <div class="control-group">
             <label for="textColor">文字色</label>
             <input id="textColor" type="color" value="#ffffff" style="width: 50px; height: 32px; border: 1px solid #ddd; border-radius: 6px; cursor: pointer;" />
+        </div>
+        <div class="control-group">
+            <label for="strokeColor">描边色</label>
+            <input id="strokeColor" type="color" value="#000000" style="width: 50px; height: 32px; border: 1px solid #ddd; border-radius: 6px; cursor: pointer;" />
         </div>
         <div class="control-group">
             <label for="bgColor1">背景色1</label>
@@ -162,11 +297,6 @@
             <label for="bgShadow">背景阴影</label>
             <input id="bgShadow" type="range" min="0" max="30" step="2" value="12" />
             <span class="size-value" id="bgShadowValue">12</span>
-        </div>
-        <div class="control-group">
-            <label for="borderRadius">圆角</label>
-            <input id="borderRadius" type="range" min="0" max="60" step="2" value="20" />
-            <span class="size-value" id="borderRadiusValue">20</span>
         </div>
     </div>
 
@@ -201,6 +331,19 @@
         const bgShadowValueEl = document.getElementById('bgShadowValue');
         const borderRadiusEl = document.getElementById('borderRadius');
         const borderRadiusValueEl = document.getElementById('borderRadiusValue');
+        const shapeEl = document.getElementById('shape');
+        const borderRadiusGroupEl = document.getElementById('borderRadiusGroup');
+        const innerShadowEl = document.getElementById('innerShadow');
+        const innerShadowValueEl = document.getElementById('innerShadowValue');
+        const highlightEl = document.getElementById('highlight');
+        const embossEl = document.getElementById('emboss');
+        const embossValueEl = document.getElementById('embossValue');
+        const textStrokeEl = document.getElementById('textStroke');
+        const textStrokeValueEl = document.getElementById('textStrokeValue');
+        const strokeColorEl = document.getElementById('strokeColor');
+        const fontFamilyEl = document.getElementById('fontFamily');
+        const letterSpacingEl = document.getElementById('letterSpacing');
+        const letterSpacingValueEl = document.getElementById('letterSpacingValue');
 
         function applyTextStyle() {
             const text = textContentEl.value.trim() || 'ZH';
@@ -211,13 +354,42 @@
             const offsetY = Number(offsetYEl.value);
             const shadowBlur = Number(shadowBlurEl.value);
             const textColor = textColorEl.value;
+            const textStroke = Number(textStrokeEl.value);
+            const strokeColor = strokeColorEl.value;
+            const emboss = Number(embossEl.value);
+            const fontFamily = fontFamilyEl.value;
+            const letterSpacing = Number(letterSpacingEl.value);
 
             logoTextEl.textContent = text;
             logoTextEl.style.fontStyle = slant;
             logoTextEl.style.fontWeight = weight;
             logoTextEl.style.fontSize = `${fontSize}px`;
             logoTextEl.style.color = textColor;
-            logoTextEl.style.textShadow = `0 2px ${shadowBlur}px rgba(0, 0, 0, 0.3)`;
+            logoTextEl.style.fontFamily = fontFamily;
+            logoTextEl.style.letterSpacing = `${letterSpacing}px`;
+            
+            // 构建复杂的文字阴影效果
+            let textShadows = [];
+            
+            // 基础阴影
+            if (shadowBlur > 0) {
+                textShadows.push(`0 2px ${shadowBlur}px rgba(0, 0, 0, 0.3)`);
+            }
+            
+            // 浮雕效果
+            if (emboss > 0) {
+                textShadows.push(`0 ${emboss}px ${emboss * 2}px rgba(0, 0, 0, 0.4)`);
+                textShadows.push(`0 -${emboss * 0.5}px ${emboss}px rgba(255, 255, 255, 0.3)`);
+            }
+            
+            logoTextEl.style.textShadow = textShadows.join(', ') || 'none';
+            
+            // 文字描边
+            if (textStroke > 0) {
+                logoTextEl.style.webkitTextStroke = `${textStroke}px ${strokeColor}`;
+            } else {
+                logoTextEl.style.webkitTextStroke = 'none';
+            }
             
             const skew = slant === 'italic' ? 'skewX(-12deg)' : '';
             const translate = `translate(${offsetX}px, ${offsetY}px)`;
@@ -227,18 +399,75 @@
             offsetXValueEl.textContent = String(offsetX);
             offsetYValueEl.textContent = String(offsetY);
             shadowBlurValueEl.textContent = String(shadowBlur);
+            textStrokeValueEl.textContent = String(textStroke);
+            embossValueEl.textContent = String(emboss);
+            letterSpacingValueEl.textContent = String(letterSpacing);
         }
 
         function applyBackgroundColor() {
             const bgColor1 = bgColor1El.value;
             const bgColor2 = bgColor2El.value;
             const bgShadow = Number(bgShadowEl.value);
+            const innerShadow = Number(innerShadowEl.value);
+            
             logoEl.style.background = `linear-gradient(135deg, ${bgColor1} 0%, ${bgColor2} 100%)`;
-            logoEl.style.boxShadow = `0 4px ${bgShadow}px rgba(0, 0, 0, 0.15)`;
+            
+            // 组合外阴影和内阴影
+            let boxShadows = [];
+            
+            // 外阴影
+            if (bgShadow > 0) {
+                boxShadows.push(`0 4px ${bgShadow}px rgba(0, 0, 0, 0.15)`);
+            }
+            
+            // 内阴影
+            if (innerShadow > 0) {
+                boxShadows.push(`inset 0 ${innerShadow}px ${innerShadow * 2}px rgba(0, 0, 0, 0.3)`);
+            }
+            
+            logoEl.style.boxShadow = boxShadows.join(', ') || 'none';
+            
             bgShadowValueEl.textContent = String(bgShadow);
+            innerShadowValueEl.textContent = String(innerShadow);
+        }
+
+        function applyHighlight() {
+            const highlight = highlightEl.value;
+            
+            if (highlight === 'none') {
+                logoEl.classList.remove('with-highlight');
+                logoEl.style.setProperty('--highlight-opacity', '0');
+            } else {
+                logoEl.classList.add('with-highlight');
+                const opacity = {
+                    'subtle': '0.15',
+                    'medium': '0.3',
+                    'strong': '0.5'
+                }[highlight];
+                
+                // 使用 ::before 伪元素的 opacity
+                const beforeEl = logoEl.querySelector('::before');
+                if (highlight !== 'none') {
+                    logoEl.style.setProperty('--highlight-opacity', opacity);
+                }
+            }
+        }
+
+        function applyShape() {
+            const shape = shapeEl.value;
+            if (shape === 'circle') {
+                logoEl.style.borderRadius = '50%';
+                borderRadiusGroupEl.classList.add('disabled');
+            } else {
+                applyBorderRadius();
+                borderRadiusGroupEl.classList.remove('disabled');
+            }
         }
 
         function applyBorderRadius() {
+            const shape = shapeEl.value;
+            if (shape === 'circle') return;
+            
             const borderRadius = Number(borderRadiusEl.value);
             logoEl.style.borderRadius = `${borderRadius}px`;
             borderRadiusValueEl.textContent = String(borderRadius);
@@ -264,14 +493,23 @@
         bgColor2El.addEventListener('input', applyBackgroundColor);
         bgShadowEl.addEventListener('input', applyBackgroundColor);
         borderRadiusEl.addEventListener('input', applyBorderRadius);
+        shapeEl.addEventListener('change', applyShape);
+        innerShadowEl.addEventListener('input', applyBackgroundColor);
+        highlightEl.addEventListener('change', applyHighlight);
+        embossEl.addEventListener('input', applyTextStyle);
+        textStrokeEl.addEventListener('input', applyTextStyle);
+        strokeColorEl.addEventListener('input', applyTextStyle);
+        fontFamilyEl.addEventListener('change', applyTextStyle);
+        letterSpacingEl.addEventListener('input', applyTextStyle);
 
         // 初始化样式
         applyTextStyle();
         applyLogoSize();
         applyBackgroundColor();
-        applyBorderRadius();
+        applyShape();
+        applyHighlight();
 
-        // 绘制圆角矩形的辅助函数（兼容性更好）
+        // 绘制圆角矩形的辅助函数
         function drawRoundedRect(ctx, x, y, width, height, radius) {
             ctx.beginPath();
             ctx.moveTo(x + radius, y);
@@ -286,6 +524,19 @@
             ctx.closePath();
         }
 
+        // 绘制圆形的辅助函数
+        function drawCircle(ctx, x, y, radius) {
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.closePath();
+        }
+
+        // 解析字体family，提取实际字体名称
+        function parseFontFamily(fontFamily) {
+            // 移除引号和备选字体，只保留主要字体
+            return fontFamily.split(',')[0].replace(/['"]/g, '');
+        }
+
         function downloadLogo() {
             try {
                 const canvas = document.getElementById('canvas');
@@ -296,6 +547,9 @@
                 const logoSize = Number(logoSizeEl.value);
                 const canvasSize = logoSize * scale;
                 const bgShadow = Number(bgShadowEl.value);
+                const shape = shapeEl.value;
+                const innerShadow = Number(innerShadowEl.value);
+                const highlight = highlightEl.value;
                 
                 // 留出阴影空间
                 const shadowSpace = bgShadow * scale * 2;
@@ -309,20 +563,99 @@
                 gradient.addColorStop(0, bgColor1);
                 gradient.addColorStop(1, bgColor2);
                 
-                // 绘制阴影
+                // 绘制外阴影
                 ctx.shadowColor = 'rgba(0, 0, 0, 0.15)';
                 ctx.shadowBlur = bgShadow * scale;
                 ctx.shadowOffsetX = 0;
                 ctx.shadowOffsetY = 4 * scale;
                 
-                // 绘制圆角矩形背景
-                const borderRadius = Number(borderRadiusEl.value);
-                const radius = borderRadius * scale;
+                // 根据形状绘制背景
                 ctx.fillStyle = gradient;
-                drawRoundedRect(ctx, shadowSpace/2, shadowSpace/2, canvasSize, canvasSize, radius);
+                if (shape === 'circle') {
+                    const centerX = shadowSpace/2 + canvasSize/2;
+                    const centerY = shadowSpace/2 + canvasSize/2;
+                    const radius = canvasSize / 2;
+                    drawCircle(ctx, centerX, centerY, radius);
+                } else {
+                    const borderRadius = Number(borderRadiusEl.value);
+                    const radius = borderRadius * scale;
+                    drawRoundedRect(ctx, shadowSpace/2, shadowSpace/2, canvasSize, canvasSize, radius);
+                }
                 ctx.fill();
                 
-                // 清除阴影设置，以免影响文字
+                // 清除阴影设置
+                ctx.shadowColor = 'transparent';
+                ctx.shadowBlur = 0;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 0;
+                
+                // 绘制内阴影
+                if (innerShadow > 0) {
+                    ctx.save();
+                    ctx.globalCompositeOperation = 'source-atop';
+                    
+                    // 创建内阴影渐变
+                    const innerGradient = ctx.createRadialGradient(
+                        shadowSpace/2 + canvasSize/2, 
+                        shadowSpace/2 + innerShadow * scale, 
+                        0,
+                        shadowSpace/2 + canvasSize/2, 
+                        shadowSpace/2 + canvasSize/2, 
+                        canvasSize/2
+                    );
+                    innerGradient.addColorStop(0, 'rgba(0, 0, 0, 0.3)');
+                    innerGradient.addColorStop(0.5, 'rgba(0, 0, 0, 0.1)');
+                    innerGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                    
+                    ctx.fillStyle = innerGradient;
+                    if (shape === 'circle') {
+                        const centerX = shadowSpace/2 + canvasSize/2;
+                        const centerY = shadowSpace/2 + canvasSize/2;
+                        const radius = canvasSize / 2;
+                        drawCircle(ctx, centerX, centerY, radius);
+                    } else {
+                        const borderRadius = Number(borderRadiusEl.value);
+                        const radius = borderRadius * scale;
+                        drawRoundedRect(ctx, shadowSpace/2, shadowSpace/2, canvasSize, canvasSize, radius);
+                    }
+                    ctx.fill();
+                    ctx.restore();
+                }
+                
+                // 绘制高光效果
+                if (highlight !== 'none') {
+                    ctx.save();
+                    ctx.globalCompositeOperation = 'source-atop';
+                    
+                    const highlightOpacity = {
+                        'subtle': 0.15,
+                        'medium': 0.3,
+                        'strong': 0.5
+                    }[highlight];
+                    
+                    const highlightGradient = ctx.createLinearGradient(
+                        shadowSpace/2, 
+                        shadowSpace/2, 
+                        shadowSpace/2, 
+                        shadowSpace/2 + canvasSize * 0.4
+                    );
+                    highlightGradient.addColorStop(0, `rgba(255, 255, 255, ${highlightOpacity})`);
+                    highlightGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                    
+                    ctx.fillStyle = highlightGradient;
+                    if (shape === 'circle') {
+                        const centerX = shadowSpace/2 + canvasSize/2;
+                        const centerY = shadowSpace/2 + canvasSize/2;
+                        const radius = canvasSize / 2;
+                        drawCircle(ctx, centerX, centerY, radius);
+                    } else {
+                        const borderRadius = Number(borderRadiusEl.value);
+                        const radius = borderRadius * scale;
+                        drawRoundedRect(ctx, shadowSpace/2, shadowSpace/2, canvasSize, canvasSize, radius);
+                    }
+                    ctx.fill();
+                    ctx.restore();
+                }
                 
                 // 获取当前文字样式
                 const text = textContentEl.value.trim() || 'ZH';
@@ -333,26 +666,130 @@
                 const offsetY = Number(offsetYEl.value);
                 const shadowBlur = Number(shadowBlurEl.value);
                 const textColor = textColorEl.value;
+                const textStroke = Number(textStrokeEl.value);
+                const strokeColor = strokeColorEl.value;
+                const emboss = Number(embossEl.value);
+                const fontFamily = fontFamilyEl.value;
+                const letterSpacing = Number(letterSpacingEl.value);
                 
-                // 添加阴影效果到文字
-                ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
-                ctx.shadowBlur = shadowBlur * scale;
-                ctx.shadowOffsetX = 0;
-                ctx.shadowOffsetY = 2 * scale;
-                
-                // 绘制文字
-                ctx.fillStyle = textColor;
-                ctx.font = `${slant} ${weight} ${fontSize * scale}px Arial`;
+                // 设置文字样式
+                ctx.font = `${slant} ${weight} ${fontSize * scale}px ${fontFamily}`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-
+                
                 ctx.save();
                 ctx.translate(canvasSize / 2 + offsetX * scale + shadowSpace/2, canvasSize / 2 + offsetY * scale + shadowSpace/2);
                 if (slant === 'italic') {
                     const angle = -12 * Math.PI / 180;
                     ctx.transform(1, 0, Math.tan(angle), 1, 0, 0);
                 }
-                ctx.fillText(text, 0, 0);
+                
+                // 手动处理字距（letterSpacing）
+                if (letterSpacing !== 0) {
+                    // 逐个字符绘制以实现字距效果
+                    const chars = text.split('');
+                    const totalWidth = chars.reduce((sum, char, i) => {
+                        const charWidth = ctx.measureText(char).width;
+                        return sum + charWidth + (i < chars.length - 1 ? letterSpacing * scale : 0);
+                    }, 0);
+                    
+                    let currentX = -totalWidth / 2;
+                    
+                    chars.forEach((char, i) => {
+                        const charWidth = ctx.measureText(char).width;
+                        
+                        ctx.save();
+                        ctx.translate(currentX + charWidth / 2, 0);
+                        
+                        // 绘制浮雕效果
+                        if (emboss > 0) {
+                            ctx.shadowColor = 'rgba(255, 255, 255, 0.3)';
+                            ctx.shadowBlur = emboss * scale;
+                            ctx.shadowOffsetX = 0;
+                            ctx.shadowOffsetY = -emboss * 0.5 * scale;
+                            ctx.fillStyle = textColor;
+                            ctx.fillText(char, 0, 0);
+                            
+                            ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+                            ctx.shadowBlur = emboss * 2 * scale;
+                            ctx.shadowOffsetX = 0;
+                            ctx.shadowOffsetY = emboss * scale;
+                            ctx.fillStyle = textColor;
+                            ctx.fillText(char, 0, 0);
+                        }
+                        
+                        // 绘制文字阴影
+                        if (shadowBlur > 0) {
+                            ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+                            ctx.shadowBlur = shadowBlur * scale;
+                            ctx.shadowOffsetX = 0;
+                            ctx.shadowOffsetY = 2 * scale;
+                        } else {
+                            ctx.shadowColor = 'transparent';
+                            ctx.shadowBlur = 0;
+                        }
+                        
+                        // 绘制描边
+                        if (textStroke > 0) {
+                            ctx.strokeStyle = strokeColor;
+                            ctx.lineWidth = textStroke * scale;
+                            ctx.lineJoin = 'round';
+                            ctx.miterLimit = 2;
+                            ctx.strokeText(char, 0, 0);
+                        }
+                        
+                        // 绘制文字填充
+                        ctx.fillStyle = textColor;
+                        ctx.fillText(char, 0, 0);
+                        
+                        ctx.restore();
+                        
+                        currentX += charWidth + letterSpacing * scale;
+                    });
+                } else {
+                    // 正常绘制（无字距调整）
+                    // 绘制浮雕效果
+                    if (emboss > 0) {
+                        ctx.shadowColor = 'rgba(255, 255, 255, 0.3)';
+                        ctx.shadowBlur = emboss * scale;
+                        ctx.shadowOffsetX = 0;
+                        ctx.shadowOffsetY = -emboss * 0.5 * scale;
+                        ctx.fillStyle = textColor;
+                        ctx.fillText(text, 0, 0);
+                        
+                        ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+                        ctx.shadowBlur = emboss * 2 * scale;
+                        ctx.shadowOffsetX = 0;
+                        ctx.shadowOffsetY = emboss * scale;
+                        ctx.fillStyle = textColor;
+                        ctx.fillText(text, 0, 0);
+                    }
+                    
+                    // 绘制文字阴影
+                    if (shadowBlur > 0) {
+                        ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+                        ctx.shadowBlur = shadowBlur * scale;
+                        ctx.shadowOffsetX = 0;
+                        ctx.shadowOffsetY = 2 * scale;
+                    } else {
+                        ctx.shadowColor = 'transparent';
+                        ctx.shadowBlur = 0;
+                    }
+                    
+                    // 绘制描边
+                    if (textStroke > 0) {
+                        ctx.strokeStyle = strokeColor;
+                        ctx.lineWidth = textStroke * scale;
+                        ctx.lineJoin = 'round';
+                        ctx.miterLimit = 2;
+                        ctx.strokeText(text, 0, 0);
+                    }
+                    
+                    // 绘制文字填充
+                    ctx.fillStyle = textColor;
+                    ctx.fillText(text, 0, 0);
+                }
+                
                 ctx.restore();
                 
                 // 下载图片
@@ -364,7 +801,6 @@
                         link.href = url;
                         link.click();
                         URL.revokeObjectURL(url);
-                        //alert('✅ 图片已下载！');
                     } else {
                         alert('❌ 生成图片失败，请重试。');
                     }
